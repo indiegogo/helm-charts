@@ -6,4 +6,5 @@ chart-dirs:
 chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami
   - indiegogo=https://charts.indiegogo.com/
+  - groundhog2k=https://groundhog2k.github.io/helm-charts/
 helm-extra-args: --timeout 600s
