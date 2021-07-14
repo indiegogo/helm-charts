@@ -1,4 +1,6 @@
 # Set to true for GPG signing
 sign: false
-# UID of the GPG key to use
-key: Chart Releaser Test Key
+# Set github owner
+owner: indiegogo
+# Set github repo
+git-repo: helm-charts
