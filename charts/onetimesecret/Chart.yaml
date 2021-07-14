@@ -14,7 +14,7 @@ sources:
   - https://github.com/onetimesecret/onetimesecret
 dependencies:
   - name: igg-common
-    version: "0.1.0"
+    version: "0.1.1"
     repository: https://charts.indiegogo.com/
     tags:
       - indiegogo-common
