@@ -1,9 +1,0 @@
-** Please be patient while the chart is being deployed **
-
--------------------------------------------------------------------------------
- NOTICE
-
-    The onetimesecret pod will likely restart two or three times before it is fully operational.
-    This is because the Redis instance is in the process of starting.
-
--------------------------------------------------------------------------------
