@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplValues.render" ( dict "value" .Values.commonLabels "scope" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  ports:
+  - name: {{ include "common.names.fullname" . }}
+    port: {{ default .Values.networkPort .Values.servicePort }}
+    protocol: TCP
+  selector:
+    app: {{ include "common.names.fullname" . }}
+  type: {{ .Values.service.type }}
