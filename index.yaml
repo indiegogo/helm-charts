@@ -2,8 +2,31 @@ apiVersion: v1
 entries:
   igg-common:
   - apiVersion: v2
+    created: "2021-07-14T20:08:06.779490952Z"
+    description: A Library Helm Chart for grouping common logic between Indiegogo
+      charts. This chart is not deployable by itself.
+    digest: 51f40e4dc860afdd779012f9565d87bd09bfac124b21fc1010981da1d184f500
+    home: https://github.com/indiegogo
+    keywords:
+    - common
+    - helper
+    - template
+    - indiegogo
+    - igg
+    maintainers:
+    - email: devops@indiegogo.com
+      name: DevOps
+    name: igg-common
+    sources:
+    - https://github.com/indiegogo
+    type: library
+    urls:
+    - https://github.com/indiegogo/helm-charts/releases/download/igg-common-0.1.1/igg-common-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     created: "2021-07-14T18:54:16.633119857Z"
-    description: A Library Helm Chart for grouping common logic between Indiegogo charts. This chart is not deployable by itself.
+    description: A Library Helm Chart for grouping common logic between Indiegogo
+      charts. This chart is not deployable by itself.
     digest: 8205f5fbb29a78b00416285dafe693363997c1bd407fad2b6aa0ee2877c7ff5d
     home: https://github.com/indiegogo
     keywords:
@@ -22,4 +45,4 @@ entries:
     urls:
     - https://github.com/indiegogo/helm-charts/releases/download/igg-common-0.1.0/igg-common-0.1.0.tgz
     version: 0.1.0
-generated: "2019-12-08T02:57:21.985425597Z"
+generated: "2021-07-14T20:08:06.779506252Z"
