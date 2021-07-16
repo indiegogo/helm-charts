@@ -19,7 +19,7 @@ commonLabels: {}
 configuration:
   ## @param {string} configuration.host - Host/domain for accessing the website
   ##
-  host: "onetimesecret.k8s.indiegogo.net"
+  host: "localhost"
   ## @param {boolean} configuration.ssl - Enable/disable SSL support
   ##
   ssl: true
@@ -107,14 +107,15 @@ configuration:
 ## @param {string} image.pullPolicy - One-Time Secret image pull policy
 ##
 image:
-  repository: gcr.io/indiegogo-staging/onetimesecret
-  ## You can manage a registry with
+  ## OPTION 1: You can set the entire image repository in one line below
+  repository: gcr.io/indiegogo-public/onetimesecret:latest
+  ## OPTION 2: You can manage a registry with
   # registry: gcr.io
-  # repository: indiegogo-com/onetimesecret
+  # repository: indiegogo-public/onetimesecret
 
   ## Override the image tag to deploy by setting this variable.
   ## If no value is set, the chart's appVersion will be used.
-  tag: '20210617'
+  # tag: 'latest'
 
   pullPolicy: IfNotPresent
 

@@ -27,7 +27,7 @@ spec:
       containers:
       - name: onetimesecret
         {{- with .Values.image }}
-        image: "{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ default $.Chart.AppVersion .tag }}"
+        image: "{{- if contains ":" .repository -}}{{ .repository }}{{- else -}}{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ default $.Chart.AppVersion .tag }}{{- end -}}"
         {{- end }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:

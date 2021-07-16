@@ -94,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------- | ------- | -------------------------------------------------------------- | ------------------------------- |
 | `image.registry`                    | string  | The Docker image registry                                      | `"gcr.io"`                      |
 | `image.repository`                  | string  | The Docker image repository                                    | `"indiegogo-com/onetimesecret"` |
-| `image.tag`                         | string  | The Docker image tag                                           | `"canary"`                      |
+| `image.tag`                         | string  | The Docker image tag                                           | `'latest'`                      |
 | `image.pullPolicy`                  | string  | The Docker image pull policy                                   | `"IfNotPresent"`                |
 | `containerPort`                     | int     | OTS container port (overrides `networkPort`)                   | `nil`                           |
 | `replicaCount`                      | int     | Number of OTS replicas to deploy                               | `1`                             |
