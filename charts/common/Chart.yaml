@@ -1,14 +1,14 @@
 apiVersion: v2
-name: igg-common
-version: 0.1.1
+name: common
+version: 0.1.2
 description: A Library Helm Chart for grouping common logic between Indiegogo charts. This chart is not deployable by itself.
 type: library
 keywords:
   - common
   - helper
   - template
+  - function
   - indiegogo
-  - igg
 home: https://github.com/indiegogo
 sources:
   - https://github.com/indiegogo
