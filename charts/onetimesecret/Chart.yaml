@@ -13,8 +13,8 @@ sources:
   - https://github.com/indiegogo/onetimesecret
   - https://github.com/onetimesecret/onetimesecret
 dependencies:
-  - name: igg-common
-    version: "0.1.1"
+  - name: common
+    version: "0.1.2"
     repository: https://charts.indiegogo.com/
     tags:
       - indiegogo-common
