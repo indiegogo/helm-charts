@@ -44,8 +44,8 @@ spec:
         - name: ONETIMESECRET_SECRET
           valueFrom:
             secretKeyRef:
-              name: {{ template "ots.secretName" . }}
-              key: {{ template "ots.secretKey" . }}
+              key: secret 
+              name: {{ .Release.Name }}-secret
         ports:
         - containerPort: {{ default .Values.networkPort .Values.containerPort }}
         {{- if .Values.resources }}
