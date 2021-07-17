@@ -1,9 +1,0 @@
-dependencies:
-- name: igg-common
-  repository: https://charts.indiegogo.com/
-  version: 0.1.1
-- name: redis
-  repository: https://groundhog2k.github.io/helm-charts/
-  version: 0.4.6
-digest: sha256:ce55ad87d0c64a9cfe9efcd7bb73bb9a2faa3dd72b5ce38fd7ef4ce95cded9ba
-generated: "2021-07-14T16:29:16.675594-04:00"
