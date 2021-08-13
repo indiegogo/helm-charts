@@ -10,7 +10,7 @@ metadata:
 spec:
   ports:
   - name: {{ include "common.names.fullname" . }}
-    port: {{ default .Values.networkPort .Values.servicePort }}
+    port: {{ default .Values.networkPort .Values.service.port }}
     protocol: TCP
   selector:
     app: {{ include "common.names.fullname" . }}
