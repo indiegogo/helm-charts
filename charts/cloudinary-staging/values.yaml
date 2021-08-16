@@ -1,0 +1,138 @@
+## @section Common parameters
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion:
+## @param nameOverride String to partially override names.fullname
+##
+nameOverride:
+## @param fullnameOverride String to fully override names.fullname
+##
+fullnameOverride:
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+
+
+## @section Image parameters
+
+## Cloudinary image
+## @param {string} image.registry - Cloudinary image registry
+## @param {string} image.repository - Cloudinary image repository
+## @param {string} image.tag - Cloudinary image tag (immutable tags are recommended)
+## @param {string} image.pullPolicy - Cloudinary image pull policy
+##
+image:
+  ## OPTION 1: You can set the entire image repository in one line below
+  repository: gcr.io/indiegogo-staging/nginx:20190919
+  ## OPTION 2: You can manage a registry with
+  # registry: gcr.io
+  # repository: indiegogo-staging/nginx
+
+  ## Override the image tag to deploy by setting this variable.
+  ## If no value is set, the chart's appVersion will be used.
+  # tag: 'latest'
+
+  pullPolicy: IfNotPresent
+
+
+## @section Deployment parameters
+
+## @param {integer} replicaCount - Number of Cloudinary deployment replicas
+##
+replicaCount: 3
+## @param {string} strategy.type - Deployment strategy type
+## @param {Object} strategy.rollingUpdate
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+##
+strategy:
+  ## StrategyType
+  ## Can be set to RollingUpdate or Recreate
+  ##
+  type: RollingUpdate
+  rollingUpdate: {}
+## Resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param {Object} resources.limits - The resources limits for the Cloudinary container
+## @param {Object} resources.requests - The requested resources for the Cloudinary container
+##
+resources:
+  requests: {}
+  limits: {}
+## Cloudinary container liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param {boolean} readinessProbe.enabled - Enable/disable readinessProbe on Cloudinary container
+## @param {integer} readinessProbe.port - Set port for the HTTP get readinessProbe (overrides `networkPort`)
+## @param {integer} readinessProbe.initialDelaySeconds - Initial delay seconds for readinessProbe
+## @param {integer} readinessProbe.periodSeconds - Period seconds for readinessProbe
+## @param {integer} readinessProbe.timeoutSeconds - Timeout seconds for readinessProbe
+## @param {integer} readinessProbe.successThreshold - Success threshold for readinessProbe
+## @param {integer} readinessProbe.failureThreshold - Failure threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  port:
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds:
+  successThreshold:
+  failureThreshold:
+## @param {Object} customReadinessProbe - Custom readinessProbe that overrides the default one
+##
+customReadinessProbe: {}
+## @param {boolean} livenessProbeEnabled - Enable/disable the livenessProbe
+##
+livenessProbeEnabled: false
+## @param {Object} livenessProbe - Set a livenessProbe
+##
+livenessProbe: {}
+
+
+## @section Network/service related parameters
+
+## @param {integer} networkPort - Set the port to be used across the Cloudinary container, readinessProbe, service, and ingress
+##
+networkPort: 80
+## @param {integer} containerPort - Override the default port (`networkPort`) used in the container
+##
+containerPort:
+## Service parameters
+## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+## @param {string} service.name - Override the default name (`Release.Name`) used in the service
+## @param {integer} service.port - Override the default port (`networkPort`) used in the service
+## @param {string} service.type - Set the service type
+##
+service:
+  name: http
+  port:
+  ## ServiceType
+  ## Can be set to ClusterIP, NodePort, LoadBalancer, or ExternalName
+  ##
+  type: NodePort
+
+
+## @section Ingress parameters
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
+
+ingress:
+  ## @param {boolean} ingress.enabled - Enable/disable the ingress
+  ##
+  enabled: true
+  ## Ingress rule
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  backend:
+    ## @param {string} ingress.backend.serviceName - The backend service name
+    ## Defaults to the Chart name, unless `fullnameOverride` or `nameOverride` is set
+    ##
+    serviceName:
+    ## @param {string} ingress.backend.servicePort - The backend service port
+    ## Defaults to the value of `networkPort`
+    ##
+    servicePort:
+  ## @param {Object} ingress.customAnnotations - Custom annotations
+  ##
+  customAnnotations:
+    kubernetes.io/ingress.class: gce
+    ingress.gcp.kubernetes.io/pre-shared-cert: dev-cloudinary-letsencrypt
+    kubernetes.io/ingress.global-static-ip-name: dev-cloudinary
+    kubernetes.io/ingress.allow-http: "false"

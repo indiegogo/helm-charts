@@ -1,0 +1,71 @@
+kind: Deployment
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplValues.render" ( dict "value" .Values.commonLabels "scope" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "common.names.fullname" . }}
+  replicas: {{ .Values.replicaCount }}
+  {{- if .Values.strategy }}
+  strategy: {{- toYaml .Values.strategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common.names.fullname" . }}
+    spec:
+      volumes:
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/America/Los_Angeles
+      - name: {{ printf "%s-config" (include "common.names.fullname" .) }}
+        configMap:
+          name: {{ include "common.names.fullname" . }}
+      containers:
+      - name: {{ include "common.names.fullname" . }}
+        {{- with .Values.image }}
+        image: "{{- if contains ":" .repository -}}{{ .repository }}{{- else -}}{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ default $.Chart.AppVersion .tag }}{{- end -}}"
+        {{- end }}
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        ports:
+        - containerPort: {{ default .Values.networkPort .Values.containerPort }}
+        command: [{{ default "/usr/sbin/nginx" | quote }}]
+        args:
+          - {{ "-c" | quote }}
+          - {{ "/etc/nginx/nginx.conf" | quote }}
+        {{- if .Values.resources }}
+        resources: {{- toYaml .Values.resources | nindent 10 }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: {{ default .Values.networkPort .Values.readinessProbe.port }}
+            httpHeaders:
+            - name: Host
+              value: dev.iggcdn.com
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- else if .Values.customReadinessProbe }}
+        readinessProbe: {{- toYaml .Values.customReadinessProbe | nindent 10 }}
+        {{- end }}
+        {{- if .Values.livenessProbeEnabled }}
+        livenessProbe: {{- toYaml .Values.livenessProbe | nindent 10 }}
+        {{- end }}
+        volumeMounts:
+        - name: tz-config
+          mountPath: /etc/localtime
+          readOnly: true
+        - name: {{ printf "%s-config" (include "common.names.fullname" .) }}
+          mountPath: /etc/nginx/nginx.conf
+          readOnly: true
+          subPath: nginx.conf

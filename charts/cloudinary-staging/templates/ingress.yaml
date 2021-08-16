@@ -1,0 +1,20 @@
+{{- if .Values.ingress.enabled }}
+kind: Ingress
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplValues.render" ( dict "value" .Values.commonLabels "scope" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.ingress.customAnnotations }}
+  annotations: {{- toYaml .Values.ingress.customAnnotations | nindent 4 }}
+  {{- end }}
+spec:
+  defaultBackend:
+    service:
+      name: {{ default (include "common.names.fullname" .) .Values.ingress.backend.serviceName }}
+      port:
+        number: {{ default .Values.networkPort .Values.ingress.backend.servicePort }}
+{{- end }}
