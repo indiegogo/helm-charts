@@ -5,7 +5,7 @@
 ## TL;DR
 
 ```bash
-$ helm repo add indiegogo https://indiegogo.github.io/helm-charts
+$ helm repo add indiegogo https://charts.indiegogo.com
 $ helm install my-release indiegogo/onetimesecret
 ```
 
@@ -65,8 +65,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                     | Type    | Description                                                                         | Default                     |
 | ---------------------------------------- | ------- | ----------------------------------------------------------------------------------- | --------------------------- |
-| `configuration.host`                     | string  | OTS host (the domain you will access OTS at)                                        | `"localhost:3000"`          |
+| `configuration.host`                     | string  | OTS host (the domain you will access OTS at)                                        | `"localhost"`               |
 | `configuration.ssl`                      | boolean | Enable SSL (HTTPS) support                                                          | `false`                     |
+| `configuration.baseRedisUrl`             | string  | Base Redis URL (see values.yaml for more info)                                      | `""`                        |
 | `configuration.colonels`                 | string  | OTS account created with this email is automatically considered admin of the system | `""`                        |
 | `configuration.secret`                   | string  | Used to encrypt OTS secrets - don't forget this, save it somewhere safe             | `"CHANGEME"`                |
 | `configuration.emailer.sendgridEnabled`  | boolean | Use SendGrid to allow OTS the ability to send emails                                | `false`                     |
@@ -83,41 +84,41 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration.emailer.smtpPass`         | string  | SMTP password                                                                       | `nil`                       |
 | `configuration.emailer.smtpAuth`         | string  | SMTP authentication type. Allowed values: `plain` or `login`                        | `nil`                       |
 | `configuration.incoming.enabled`         | boolean | Intended for use by IT support teams who need someone to send them sensitive info   | `false`                     |
-| `configuration.incoming.email`           | string  | Where to send the "secret" link to                                                  | `nil`                       |
+| `configuration.incoming.email`           | string  | Where the secret link is sent                                                       | `"CHANGEME@example.com"`    |
 | `configuration.incoming.passphrase`      | string  | Used to protect the "secret"                                                        | `"CHANGEME"`                |
-| `configuration.incoming.regex`           | string  | Used to ensure the ticket number is valid                                           | `"\A[a-zA-Z0-9]{6}\z"`      |
+| `configuration.incoming.regex`           | string  | Used to ensure the ticket number is valid                                           | `'\A[a-zA-Z0-9]{6}\z'`      |
 
 
 ### Deployment parameters
 
-| Name                                | Type    | Description                                                    | Default                         |
-| ----------------------------------- | ------- | -------------------------------------------------------------- | ------------------------------- |
-| `image.registry`                    | string  | The Docker image registry                                      | `"gcr.io"`                      |
-| `image.repository`                  | string  | The Docker image repository                                    | `"indiegogo-com/onetimesecret"` |
-| `image.tag`                         | string  | The Docker image tag                                           | `'latest'`                      |
-| `image.pullPolicy`                  | string  | The Docker image pull policy                                   | `"IfNotPresent"`                |
-| `containerPort`                     | int     | OTS container port (overrides `networkPort`)                   | `nil`                           |
-| `replicaCount`                      | int     | Number of OTS replicas to deploy                               | `1`                             |
-| `strategy.type`                     | string  | Deployment strategy type                                       | `"RollingUpdate"`               |
-| `resources.requests`                | object  | CPU/memory resource requests                                   | `{}`                            |
-| `resources.limits`                  | object  | CPU/memory resource limits                                     | `{}`                            |
-| `livenessProbe.enabled`             | boolean | Enable/Disable the default tcpSocket livenessProbe             | `true`                          |
-| `livenessProbe.port`                | int     | Default livenessProbe tcpSocket port (overrides `networkPort`) | `3000`                          |
-| `livenessProbe.initialDelaySeconds` | int     | Initial delay seconds for livenessProbe                        | `30`                            |
-| `livenessProbe.periodSeconds`       | int     | Period seconds for livenessProbe                               | `nil`                           |
-| `livenessProbe.timeoutSeconds`      | int     | Timeout seconds for livenessProbe                              | `nil`                           |
-| `livenessProbe.successThreshold`    | int     | Success threshold for livenessProbe                            | `nil`                           |
-| `livenessProbe.failureThreshold`    | int     | Failure threshold for livenessProbe                            | `nil`                           |
-| `customLivenessProbe`               | object  | Custom livenessProbe that overrides the default one            | `{}`                            |
-| `readinessProbeEnabled`             | boolean | Enable the custom readinessProbe                               | `false`                         |
-| `readinessProbe`                    | object  | Write your custom readiness probe here                         | `{}`                            |
+| Name                                | Type    | Description                                                    | Default                            |
+| ----------------------------------- | ------- | -------------------------------------------------------------- | ---------------------------------- |
+| `image.registry`                    | string  | The Docker image registry                                      | `"gcr.io"`                         |
+| `image.repository`                  | string  | The Docker image repository                                    | `"indiegogo-public/onetimesecret"` |
+| `image.tag`                         | string  | The Docker image tag                                           | `'latest'`                         |
+| `image.pullPolicy`                  | string  | The Docker image pull policy                                   | `"IfNotPresent"`                   |
+| `containerPort`                     | int     | OTS container port (overrides `networkPort`)                   | `nil`                              |
+| `replicaCount`                      | int     | Number of OTS replicas to deploy                               | `1`                                |
+| `strategy.type`                     | string  | Deployment strategy type                                       | `"RollingUpdate"`                  |
+| `resources.requests`                | object  | CPU/memory resource requests                                   | `{}`                               |
+| `resources.limits`                  | object  | CPU/memory resource limits                                     | `{}`                               |
+| `livenessProbe.enabled`             | boolean | Enable/Disable the default tcpSocket livenessProbe             | `true`                             |
+| `livenessProbe.port`                | int     | Default livenessProbe tcpSocket port (overrides `networkPort`) | `nil`                              |
+| `livenessProbe.initialDelaySeconds` | int     | Initial delay seconds for livenessProbe                        | `30`                               |
+| `livenessProbe.periodSeconds`       | int     | Period seconds for livenessProbe                               | `nil`                              |
+| `livenessProbe.timeoutSeconds`      | int     | Timeout seconds for livenessProbe                              | `nil`                              |
+| `livenessProbe.successThreshold`    | int     | Success threshold for livenessProbe                            | `nil`                              |
+| `livenessProbe.failureThreshold`    | int     | Failure threshold for livenessProbe                            | `nil`                              |
+| `customLivenessProbe`               | object  | Custom livenessProbe that overrides the default one            | `{}`                               |
+| `readinessProbeEnabled`             | boolean | Enable the custom readinessProbe                               | `false`                            |
+| `readinessProbe`                    | object  | Write your custom readiness probe here                         | `{}`                               |
 
 
 ### Service parameters
 
 | Name           | Type    | Description                                 | Default      |
 | ---------------| ------- | ------------------------------------------- | ------------ |
-| `service.port` | int     | OTS Service port (overrides `networkPort`)  | `3000`       |
+| `service.port` | int     | OTS Service port (overrides `networkPort`)  | `nil`        |
 | `service.type` | string  | OTS Service Type                            | `"NodePort"` |
 
 
@@ -125,9 +126,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                        | Type    | Description                                          | Default |
 | --------------------------- | ------- | ---------------------------------------------------- | ------- |
-| `ingress.enabled`           | boolean | Enable/Disable Ingress                               | `false` |
-| `ingress.tls.enabled`       | boolean | Enable/Disable Ingress TLS                           | `true`  |
-| `ingress.tls.hosts`         | string  | Ingress TLS host(s)                                  | `nil`   |
+| `ingress.enabled`           | boolean | Enable/Disable Ingress                               | `true`  |
+| `ingress.tls.enabled`       | boolean | Enable/Disable Ingress TLS                           | `false` |
+| `ingress.tls.hosts`         | string  | Ingress TLS host(s)                                  | `""`    |
 | `ingress.tls.secretName`    | string  | Ingress TLS Secret name                              | `nil`   |
 | `ingress.rules.host`        | string  | Ingress rules host                                   | `nil`   |
 | `ingress.rules.path`        | string  | Ingress rules path                                   | `nil`   |

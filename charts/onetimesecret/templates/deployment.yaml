@@ -31,16 +31,6 @@ spec:
         {{- end }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
-        {{- if .Values.configuration.host }}
-        - name: ONETIMESECRET_HOST
-          value: {{ .Values.configuration.host | quote }}
-        {{- end }}
-        - name: ONETIMESECRET_SSL
-          value: {{ ternary "true" "false" .Values.configuration.ssl | quote }}
-        {{- if .Values.configuration.redisUrl }}
-        - name: ONETIMESECRET_REDIS_URL
-          value: {{ .Values.configuration.redisUrl | quote }}
-        {{- end }}
         - name: ONETIMESECRET_SECRET
           valueFrom:
             secretKeyRef:

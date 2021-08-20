@@ -10,12 +10,12 @@ metadata:
 data:
   config: |
     :site:
-      :host: <%= ENV['ONETIMESECRET_HOST'] || 'localhost:3000' %>
-      :domain: <%= ENV['ONETIMESECRET_HOST'] || 'localhost' %>
-      :ssl: <%= ENV['ONETIMESECRET_SSL'] == 'true' %>
+      :host: {{ print .Values.configuration.host ":" .Values.networkPort | squote }}
+      :domain: {{ required "'configuration.host' is required!" .Values.configuration.host }}
+      :ssl: <%= {{ .Values.configuration.ssl | squote }} == 'true' %>
       :secret: <%= ENV['ONETIMESECRET_SECRET'] || 'CHANGEME' %>
     :redis:
-      :uri: <%= (ENV['ONETIMESECRET_REDIS_URL'] || 'redis://redis:6379/0') + '?timeout=10&thread_safe=false&logging=false' %>
+      :uri: <%= {{ default (print "redis://" .Values.redis.fullnameOverride ":6379/0") .Values.configuration.baseRedisUrl | squote }} + '?timeout=10&thread_safe=false&logging=false' %>
     {{- if .Values.configuration.colonels }}
     :colonels:
       {{- range $value := split "," .Values.configuration.colonels }}
@@ -44,8 +44,8 @@ data:
       :host: {{ .Values.configuration.emailer.smtpHost }}
       :port: {{ .Values.configuration.emailer.smtpPort }}
       :tls: {{ .Values.configuration.emailer.smtpTls }}
-      :user: {{ .Values.configuration.emailer.smtpUser }}
-      :pass: {{ .Values.configuration.emailer.smtpPass }}
+      :user: {{ default "myUser" .Values.configuration.emailer.smtpUser }}
+      :pass: {{ default "myPassword" .Values.configuration.emailer.smtpPass }}
       :auth: {{ default "plain" .Values.configuration.emailer.smtpAuth }}
     {{- end }}
     {{- if .Values.configuration.incoming.enabled }}

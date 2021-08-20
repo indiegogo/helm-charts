@@ -22,14 +22,19 @@ configuration:
   host: "localhost"
   ## @param {boolean} configuration.ssl - Enable/disable SSL support
   ##
-  ssl: true
-  ## @param {string} configuration.redisUrl - Base Redis URL to be used
+  ssl: false
+  ## @param {string} configuration.baseRedisUrl - Base Redis URL to be used
   ## ("?timeout=10&thread_safe=false&logging=false" will be appended)
+  ## This paramater is used to set a custom Redis URL (hostname, port, etc.).
+  ## By default, the base Redis URL is composed of the redis.fullnameOverride
+  ## value in this file and a default port of 6379.
+  ## Ex.:
+  # baseRedisUrl: "redis://myRedisInstance:6379/0"
   ##
-  redisUrl: redis://redis:6379/0
+  baseRedisUrl: ""
   ## @param {string} configuration.colonels - One-Time Secret admin accounts, separated by commas
   ## e.g.:
-  ## colonels: "admin@example.com,user@example.com"
+  # colonels: "admin@example.com,user@example.com"
   ##
   colonels: ""
   ## @param {string} configuration.secret - One-Time Secret encryption secret
@@ -89,7 +94,7 @@ configuration:
     enabled: false
     ## @param {string} configuration.incoming.email - Receiving email address
     ##
-    email:
+    email: "CHANGEME@example.com"
     ## @param {string} configuration.incoming.passphrase - Passphrase of the "secret" link being sent to the email
     ##
     passphrase: CHANGEME
@@ -122,6 +127,9 @@ image:
 
 ## @section Deployment parameters
 
+## @param {integer} containerPort - Override the default port (`networkPort`) used in the container
+##
+containerPort:
 ## @param {integer} replicaCount - Number of One-Time Secret deployment replicas
 ##
 replicaCount: 1
@@ -177,9 +185,6 @@ readinessProbe: {}
 ## @param {integer} networkPort - Set the port to be used across the OTS container, livenessProbe, service, and ingress
 ##
 networkPort: 3000
-## @param {integer} containerPort - Override the default port (`networkPort`) used in the container
-##
-containerPort:
 ## Service parameters
 ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
 ## @param {integer} service.port - Override the default port (`networkPort`) used in the service
@@ -203,12 +208,12 @@ ingress:
   tls:
     ## @param {boolean} ingress.tls.enabled - Enable/disable ingress TLS support
     ##
-    enabled: true
+    enabled: false
     ## @param {string} ingress.tls.hosts - TLS host(s), separated by commas
     ##
-    hosts:
+    hosts: ""
     ## @param {string} ingress.tls.secretName - Name of the Kubernetes secret to store the TLS certificate
-    ## Defaults to the value of `configuration.host` and '-tls' is appended to the end
+    ## Defaults to the value of `configuration.host` with '-tls' appended to the end
     ##
     secretName:
   ## Ingress rule
@@ -240,18 +245,18 @@ ingress:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
   ## If you do want to specify custom rules, use the example below to create your custom
   ## rule, and remove the square brackts after 'customRules:'.
-  ## e.g.:
-  ## customRules:
-  ## - host: example.com
-  ##   http:
-  ##     paths:
-  ##     - path: /
-  ##       pathType: Exact
-  ##       backend:
-  ##         service:
-  ##           name: myServiceName
-  ##           port:
-  ##             number: 8080
+  ## Ex.:
+  # customRules:
+  # - host: example.com
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Exact
+  #       backend:
+  #         service:
+  #           name: myServiceName
+  #           port:
+  #             number: 3000
   ##
   customRules: []
   ## @param {Object} ingress.customAnnotations - Custom annotations
@@ -268,4 +273,4 @@ redis:
   chartEnabled: true
   ## @param {string} redis.fullnameOverride - Override the Redis chart name
   ##
-  fullnameOverride: redis
+  fullnameOverride: "redis"
