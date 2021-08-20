@@ -1,0 +1,80 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "tplValues.render" ( dict "value" .Values.commonLabels "scope" $ ) | nindent 4 }}
+    {{- end }}
+data:
+  nginx.conf: |
+    user nginx nginx;
+    worker_processes auto;
+    worker_cpu_affinity auto;
+    worker_rlimit_nofile 65536;
+    pid /run/nginx.pid;
+    include /etc/nginx/modules-enabled/*.conf;
+    daemon off;
+    pcre_jit on;
+    error_log stderr warn;
+
+    events {
+            worker_connections 4096;
+            multi_accept on;
+    }
+
+    http {
+      sendfile on;
+      tcp_nopush on;
+      tcp_nodelay on;
+      keepalive_timeout 65;
+      types_hash_max_size 2048;
+      include /etc/nginx/mime.types;
+      default_type application/octet-stream;
+      error_log /dev/stderr debug;
+      access_log /dev/stdout combined;
+
+      map "$http_accept" $f_auto_setting {
+        default           "f_auto";
+        "~.*image/webp.*" "f_webp,fl_awebp";
+        "~.*image/jxr.*"  "f_wdp";
+      }
+
+      server {
+        listen 80;
+        server_name dev.iggcdn.com;
+        resolver kube-dns.kube-system.svc.cluster.local ipv6=off;
+        set $cloudinary_upstream_url https://indiegogo-dev-res.cloudinary.com;
+
+        location = /healthcheck {
+          return 200;
+        }
+
+        location ^~ /indiegogo-dev {
+          # Strip the indiegogo-dev/ prefix
+          rewrite ^/indiegogo-dev/(.*)$ /$1 last;
+        }
+
+        location ~ f_auto {
+          # Replace f_auto with appropriate setting based on Accept headers.
+          # Of interesting note, you can't mix mapped variables with default capture
+          # variables ($1, $2, etc.) which is why these captures are named.
+          rewrite ^(?<prefix>.*)f_auto(?<postfix>.*)$ "${prefix}${f_auto_setting}${postfix}" break;
+          try_files /nonexistent @proxy;
+        }
+
+        location / {
+          try_files /nonexistent @proxy;
+        }
+
+        location @proxy {
+          add_header Vary Accept;
+          expires 7d;
+          add_header Cache-Control public;
+          proxy_pass $cloudinary_upstream_url;
+          proxy_intercept_errors on;
+          error_page 501 =405 /nonexistent;
+        }
+      }
+    }

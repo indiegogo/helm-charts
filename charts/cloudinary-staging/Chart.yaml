@@ -1,0 +1,22 @@
+apiVersion: v2
+name: cloudinary-staging
+version: 0.1.0
+description: A Helm chart for Cloudinary
+type: application
+keywords:
+  - cloudinary
+  - proxy
+  - images
+  - image-proxy
+sources:
+  - https://github.com/indiegogo/ops_tools/tree/main/docker/nginx-cloudinary
+dependencies:
+  - name: common
+    version: "0.1.2"
+    repository: https://charts.indiegogo.com/
+    tags:
+      - indiegogo-common
+maintainers:
+  - name: DevOps
+    email: devops@indiegogo.com
+appVersion: "1.0"
