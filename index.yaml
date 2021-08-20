@@ -75,6 +75,39 @@ entries:
   onetimesecret:
   - apiVersion: v2
     appVersion: 0.11-rc.1
+    created: "2021-08-20T17:51:03.279558531Z"
+    dependencies:
+    - name: common
+      repository: https://charts.indiegogo.com/
+      tags:
+      - indiegogo-common
+      version: 0.1.2
+    - condition: redis.chartEnabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 0.4.6
+    description: A Helm chart for One-Time Secret server
+    digest: 5262f42e1137d739ef9d1d34734cd813e1982ab97761806a80e921d60c917364
+    home: https://github.com/indiegogo/onetimesecret
+    icon: https://github.com/indiegogo/onetimesecret/blob/main/public/web/img/logo-57.png
+    keywords:
+    - onetimesecret
+    - ots
+    - onetimepassword
+    - otp
+    maintainers:
+    - email: devops@indiegogo.com
+      name: DevOps
+    name: onetimesecret
+    sources:
+    - https://github.com/indiegogo/onetimesecret
+    - https://github.com/onetimesecret/onetimesecret
+    type: application
+    urls:
+    - https://github.com/indiegogo/helm-charts/releases/download/onetimesecret-0.12.1/onetimesecret-0.12.1.tgz
+    version: 0.12.1
+  - apiVersion: v2
+    appVersion: 0.11-rc.1
     created: "2021-07-17T19:10:01.058468497Z"
     dependencies:
     - name: common
@@ -106,4 +139,4 @@ entries:
     urls:
     - https://github.com/indiegogo/helm-charts/releases/download/onetimesecret-0.12.0/onetimesecret-0.12.0.tgz
     version: 0.12.0
-generated: "2021-08-20T17:49:09.431303442Z"
+generated: "2021-08-20T17:51:03.279575632Z"
