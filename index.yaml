@@ -1,5 +1,32 @@
 apiVersion: v1
 entries:
+  cloudinary-staging:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2021-08-20T17:49:09.431294542Z"
+    dependencies:
+    - name: common
+      repository: https://charts.indiegogo.com/
+      tags:
+      - indiegogo-common
+      version: 0.1.2
+    description: A Helm chart for Cloudinary
+    digest: f8d2e452e3c5afeb7b4288f54719e25c818e562f4feb98dc5b0e1f94190ecacb
+    keywords:
+    - cloudinary
+    - proxy
+    - images
+    - image-proxy
+    maintainers:
+    - email: devops@indiegogo.com
+      name: DevOps
+    name: cloudinary-staging
+    sources:
+    - https://github.com/indiegogo/ops_tools/tree/main/docker/nginx-cloudinary
+    type: application
+    urls:
+    - https://github.com/indiegogo/helm-charts/releases/download/cloudinary-staging-0.1.0/cloudinary-staging-0.1.0.tgz
+    version: 0.1.0
   common:
   - apiVersion: v2
     created: "2021-07-17T00:07:42.590939378Z"
@@ -79,4 +106,4 @@ entries:
     urls:
     - https://github.com/indiegogo/helm-charts/releases/download/onetimesecret-0.12.0/onetimesecret-0.12.0.tgz
     version: 0.12.0
-generated: "2021-07-17T19:10:01.058477697Z"
+generated: "2021-08-20T17:49:09.431303442Z"
