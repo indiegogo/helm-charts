@@ -1,0 +1,26 @@
+apiVersion: v2
+name: circle-webhook-proxy
+version: 0.1.0
+description: A Helm chart for our CircleCI webhook proxy
+type: application
+keywords:
+  - circle-ci
+  - webhook
+  - proxy
+home: https://github.com/indiegogo/ops_tools/tree/main/docker/circle-webhook-proxy
+sources:
+  - https://github.com/indiegogo/ops_tools/tree/main/docker/circle-webhook-proxy
+dependencies:
+  - name: common
+    version: "0.1.2"
+    repository: https://charts.indiegogo.com/
+    tags:
+      - indiegogo-common
+  - name: redis
+    version: "0.4.6"
+    repository: https://groundhog2k.github.io/helm-charts/
+    condition: redis.chartEnabled
+maintainers:
+  - name: DevOps
+    email: devops@indiegogo.com
+appVersion: "a834b72"
