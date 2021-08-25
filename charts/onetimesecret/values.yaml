@@ -20,6 +20,10 @@ configuration:
   ## @param {string} configuration.host - Host/domain for accessing the website
   ##
   host: "localhost"
+  ## @param {int} configuration.hostPort - Host/domain port for accessing the website
+  ## Set a port if using something other than port 80
+  ##
+  hostPort:
   ## @param {boolean} configuration.ssl - Enable/disable SSL support
   ##
   ssl: false
