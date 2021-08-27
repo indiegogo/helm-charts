@@ -1,0 +1,98 @@
+kind: Deployment
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplValues.render" ( dict "value" .Values.commonLabels "scope" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "common.names.fullname" . }}
+  replicas: {{ .Values.replicaCount }}
+  {{- if .Values.strategy }}
+  strategy: {{- toYaml .Values.strategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common.names.fullname" . }}
+    spec:
+      {{- if .Values.usePacificTime }}
+      volumes:
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/America/Los_Angeles
+      {{- end }}
+      containers:
+        - name: {{ include "common.names.fullname" . }}
+          {{- with .Values.image }}
+          image: "{{- if contains ":" .repository -}}{{ .repository }}{{- else -}}{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ default $.Chart.AppVersion .tag }}{{- end -}}"
+          {{- end }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if or .Values.environmentIncludeDefault .Values.environment }}
+          env:
+            {{- if .Values.environmentIncludeDefault }}
+            - name: CIRCLECI_HOST
+              value: {{ default "circleci.igg.me" .Values.configuration.circleCiHost }}
+            - name: GOGO_LITA_REDIS_HOST
+              value: {{ required "You must set a value for 'redis.fullnameOverride' in values.yaml" .Values.redis.fullnameOverride }}
+            - name: GOGO_LITA_DEBUG
+              value: {{ default "0" .Values.configuration.enableDebug | quote }}
+            - name: CIRCLECI_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}
+                  key: CIRCLECI_API_TOKEN
+            - name: GOGO_LITA_SLACK_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}
+                  key: GOGO_LITA_SLACK_TOKEN
+            {{- end }}
+
+            {{- range $key, $value := .Values.environment }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - containerPort: {{ default .Values.networkPort .Values.containerPort }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          command: ["bundle"]
+          args: ["exec", "lita"]
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ default .Values.networkPort .Values.livenessProbe.port }}
+            {{- if .Values.livenessProbe.initialDelaySeconds }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            {{- end }}
+            {{- if .Values.livenessProbe.periodSeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            {{- end }}
+            {{- if .Values.livenessProbe.timeoutSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            {{- end }}
+            {{- if .Values.livenessProbe.successThreshold }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            {{- end }}
+            {{- if .Values.livenessProbe.failureThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            {{- end }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- toYaml .Values.customLivenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbeEnabled }}
+          readinessProbe: {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.usePacificTime }}
+          volumeMounts:
+          - name: tz-config
+            mountPath: /etc/localtime
+            readOnly: true
+          {{- end }}

@@ -1,0 +1,24 @@
+apiVersion: v2
+name: lita
+version: 0.1.0
+description: A Helm chart for Lita
+type: application
+keywords:
+  - lita
+home: https://github.com/indiegogo/gogo-lita
+sources:
+  - https://github.com/indiegogo/gogo-lita
+dependencies:
+  - name: common
+    version: "0.1.2"
+    repository: https://charts.indiegogo.com/
+    tags:
+      - indiegogo-common
+  - name: redis
+    version: "0.4.6"
+    repository: https://groundhog2k.github.io/helm-charts/
+    condition: redis.chartEnabled
+maintainers:
+  - name: DevOps
+    email: devops@indiegogo.com
+appVersion: "b192b8c"
