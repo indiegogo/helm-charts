@@ -1,15 +1,15 @@
 ## @section Common parameters
 
-## @param kubeVersion Override Kubernetes version
+## @param {string} kubeVersion - Override Kubernetes version
 ##
 kubeVersion:
-## @param nameOverride String to partially override names.fullname
+## @param {string} nameOverride - Partially override `names.fullname`
 ##
 nameOverride:
-## @param fullnameOverride String to fully override names.fullname
+## @param {string} fullnameOverride - Fully override `names.fullname`
 ##
 fullnameOverride:
-## @param commonLabels Labels to add to all deployed objects
+## @param {object} commonLabels - Labels to add to all deployed objects
 ##
 commonLabels: {}
 

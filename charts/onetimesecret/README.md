@@ -51,14 +51,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Type   | Description                                                               | Default |
-| ------------------- | ------ | ------------------------------------------------------------------------- | ------- |
-| `kubeVersion`       | string | Override Kubernetes version                                               | `nil`   |
-| `nameOverride`      | string | Partially override names.fullname                                         | `nil`   |
-| `fullnameOverride`  | string | Fully override names.fullname                                             | `nil`   |
-| `commonLabels`      | object | Labels to add to all deployed objects                                     | `{}`    |
-| `commonAnnotations` | object | Annotations to add to all deployed objects                                | `{}`    |
-| `networkPort`       | int    | Deployment container, Deployment livenessProbe, Ingress, and Service port | `3000`  |
+| Name               | Type   | Description                                                               | Default |
+| ------------------ | ------ | ------------------------------------------------------------------------- | ------- |
+| `kubeVersion`      | string | Override Kubernetes version                                               | `nil`   |
+| `nameOverride`     | string | Partially override names.fullname                                         | `nil`   |
+| `fullnameOverride` | string | Fully override names.fullname                                             | `nil`   |
+| `commonLabels`     | object | Labels to add to all deployed objects                                     | `{}`    |
+| `networkPort`      | int    | Deployment container, Deployment livenessProbe, Ingress, and Service port | `3000`  |
 
 
 ### One-Time Secret configuration parameters
