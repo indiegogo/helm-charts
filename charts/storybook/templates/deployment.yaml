@@ -1,0 +1,82 @@
+kind: Deployment
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplValues.render" ( dict "value" .Values.commonLabels "scope" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "common.names.fullname" . }}
+  replicas: {{ .Values.replicaCount }}
+  {{- if .Values.strategy }}
+  strategy: {{- toYaml .Values.strategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common.names.fullname" . }}
+    spec:
+      volumes:
+      {{- if .Values.usePacificTime }}
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/America/Los_Angeles
+      {{- end }}
+      - name: {{ include "common.names.fullname" . }}
+        persistentVolumeClaim:
+          claimName: {{ include "common.names.fullname" . }}
+      initContainers:
+        - name: setup
+          {{- with .Values.image }}
+          image: "{{- if contains ":" .repository -}}{{ .repository }}{{- else -}}{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ default $.Chart.AppVersion .tag }}{{- end -}}"
+          {{- end }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command: ["/bin/bash"]
+          args:
+            - "-c"
+            - "chown -R nginx:nginx /var/www/upload"
+          volumeMounts:
+          - name: {{ include "common.names.fullname" . }}
+            mountPath: /var/www/upload
+          securityContext:
+            runAsUser: 0
+      containers:
+        - name: {{ include "common.names.fullname" . }}
+          {{- with .Values.image }}
+          image: "{{- if contains ":" .repository -}}{{ .repository }}{{- else -}}{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ default $.Chart.AppVersion .tag }}{{- end -}}"
+          {{- end }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.environment }}
+          env:
+            {{- range $key, $value := .Values.environment }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - containerPort: {{ default .Values.networkPort .Values.containerPort }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          command: ["/usr/sbin/nginx"]
+          args:
+            - "-g"
+            - "daemon off;"
+          {{- if .Values.livenessProbeEnabled }}
+          livenessProbe: {{- toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbeEnabled }}
+          readinessProbe: {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.usePacificTime }}
+          - name: tz-config
+            mountPath: /etc/localtime
+            readOnly: true
+          {{- end }}
+          - name: {{ include "common.names.fullname" . }}
+            mountPath: /var/www/upload

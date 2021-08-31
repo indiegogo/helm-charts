@@ -1,0 +1,168 @@
+## @section Common parameters
+
+## @param {string} kubeVersion - Override Kubernetes version
+##
+kubeVersion:
+## @param {string} nameOverride - Partially override `names.fullname`
+##
+nameOverride:
+## @param {string} fullnameOverride - Fully override `names.fullname`
+##
+fullnameOverride:
+## @param {object} commonLabels - Labels to add to all deployed objects
+##
+commonLabels: {}
+
+
+## @section Image parameters
+
+## Storybook image
+## @param {string} image.registry - Storybook image registry
+## @param {string} image.repository - Storybook image repository
+## @param {string} image.tag - Storybook image tag (immutable tags are recommended)
+## @param {string} image.pullPolicy - Storybook image pull policy
+##
+image:
+  ## OPTION 1: You can set the entire image repository in one line below
+  repository: gcr.io/indiegogo-staging/storybook:latest
+  ## OPTION 2: You can manage a registry with
+  # registry: gcr.io
+  # repository: indiegogo-staging/storybook
+
+  ## Override the image tag to deploy by setting this variable.
+  ## If no value is set, the chart's appVersion will be used.
+  # tag: 'latest'
+
+  pullPolicy: IfNotPresent
+
+
+## @section Deployment parameters
+
+## @param {object} environment - Extra environment variables
+## Ex.:
+# environment:
+#   envVar1: envVarValue1
+##
+environment: {}
+## @param {integer} containerPort - Override the default port (`networkPort`) used in the container
+##
+containerPort:
+## @param {integer} replicaCount - Number of Storybook deployment replicas
+##
+replicaCount: 1
+## @param {string} strategy.type - Deployment strategy type
+## @param {Object} strategy.rollingUpdate
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+##
+strategy:
+  ## StrategyType
+  ## Can be set to RollingUpdate or Recreate
+  ##
+  type: RollingUpdate
+  rollingUpdate: {}
+## Resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param {Object} resources.limits - The resources limits for the Storybook container
+## @param {Object} resources.requests - The requested resources for the Storybook container
+##
+resources:
+  requests: {}
+  limits: {}
+## Storybook container liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param {boolean} livenessProbeEnabled - Enable/disable the livenessProbe
+##
+livenessProbeEnabled: false
+## @param {Object} livenessProbe - Set a livenessProbe
+##
+livenessProbe: {}
+## @param {boolean} readinessProbeEnabled - Enable/disable the readinessProbe
+##
+readinessProbeEnabled: false
+## @param {Object} readinessProbe - Set a readinessProbe
+##
+readinessProbe: {}
+## @param {boolean} usePacificTime - Use Pacific time instead of UTC in container
+##
+usePacificTime: false
+
+
+## @section Network/service related parameters
+
+## @param {integer} networkPort - Set the port to be used across the OTS container, livenessProbe, service, and ingress
+##
+networkPort: 80
+## Service parameters
+## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+## @param {integer} service.port - Override the default port (`networkPort`) used in the service
+## @param {string} service.type - Set the service type
+##
+service:
+  port:
+  ## ServiceType
+  ## Can be set to ClusterIP, NodePort, LoadBalancer, or ExternalName
+  ##
+  type: NodePort
+
+
+## @section Ingress parameters
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
+
+ingress:
+  ## @param {boolean} ingress.enabled - Enable/disable the ingress
+  ##
+  enabled: true
+  tls:
+    ## @param {boolean} ingress.tls.enabled - Enable/disable ingress TLS support
+    ##
+    enabled: false
+    ## @param {list} ingress.tls.hosts - Ingress TLS host(s)
+    ##
+    hosts:
+      - example1.com
+    ## @param {string} ingress.tls.secretName - Name of the Kubernetes secret to store the TLS certificate
+    ## Defaults to the first item in the `ingress.tls.hosts` list with '-tls' appended to the end
+    ##
+    secretName:
+  ## Ingress rules
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  rules:
+    ## @param {list} ingress.rules.hosts - Ingress rules host(s)
+    ##
+    hosts:
+      - host: example1.com
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+            service:
+              name: my-service-name
+              port:
+                number: 80
+  ## @param {Object} ingress.customAnnotations - Custom annotations
+  ##
+  customAnnotations: {}
+
+
+## @section Storage parameters
+
+storage:
+  ## @param {string} storage.requestedSize - Persistent Volume Claim/Persistent Volume storage size
+  ##
+  requestedSize: 10Gi
+  ## @param {string} storage.className - Specify the type of storage (standard/ssd)
+  ##
+  className: "standard"
+
+  persistentVolume:
+    ## @param {boolean} storage.persistentVolume.enabled - Enable to use an existing persistent disk
+    ##
+    enabled: false
+    ## @param {string} storage.persistentVolume.pdName - The existing persistent disk name
+    ## This is required, unless you're creating a new Persistent Volume
+    ##
+    pdName:
+    ## @param {string} storage.persistentVolume.reclaimPolicy - Reclamation of the resources
+    ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaiming
+    ##
+    reclaimPolicy: Retain

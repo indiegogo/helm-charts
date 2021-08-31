@@ -1,0 +1,15 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  storageClassName: {{ .Values.storage.className }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.requestedSize }}
+  accessModes:
+  - ReadWriteOnce
+  {{- if .Values.storage.persistentVolume.enabled }}
+  volumeName: {{ include "common.names.fullname" . }}
+  {{- end }}
