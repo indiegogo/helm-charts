@@ -72,6 +72,35 @@ entries:
     urls:
     - https://github.com/indiegogo/helm-charts/releases/download/common-0.1.1/common-0.1.1.tgz
     version: 0.1.1
+  lita:
+  - apiVersion: v2
+    appVersion: b192b8c
+    created: "2021-09-01T21:34:48.781154757Z"
+    dependencies:
+    - name: common
+      repository: https://charts.indiegogo.com/
+      tags:
+      - indiegogo-common
+      version: 0.1.2
+    - condition: redis.chartEnabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 0.4.6
+    description: A Helm chart for Lita
+    digest: 55d651df77bc0851220834cbe518fe97d352aa78981e8e5cd3c4861fa650a5c9
+    home: https://github.com/indiegogo/gogo-lita
+    keywords:
+    - lita
+    maintainers:
+    - email: devops@indiegogo.com
+      name: DevOps
+    name: lita
+    sources:
+    - https://github.com/indiegogo/gogo-lita
+    type: application
+    urls:
+    - https://github.com/indiegogo/helm-charts/releases/download/lita-0.1.0/lita-0.1.0.tgz
+    version: 0.1.0
   onetimesecret:
   - apiVersion: v2
     appVersion: 0.11-rc.1
@@ -164,4 +193,4 @@ entries:
     urls:
     - https://github.com/indiegogo/helm-charts/releases/download/storybook-0.1.0/storybook-0.1.0.tgz
     version: 0.1.0
-generated: "2021-09-01T21:21:40.643998775Z"
+generated: "2021-09-01T21:34:48.781179158Z"
