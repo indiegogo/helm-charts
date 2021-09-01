@@ -51,42 +51,42 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Type   | Description                                                               | Default |
-| ------------------- | ------ | ------------------------------------------------------------------------- | ------- |
-| `kubeVersion`       | string | Override Kubernetes version                                               | `nil`   |
-| `nameOverride`      | string | Partially override names.fullname                                         | `nil`   |
-| `fullnameOverride`  | string | Fully override names.fullname                                             | `nil`   |
-| `commonLabels`      | object | Labels to add to all deployed objects                                     | `{}`    |
-| `commonAnnotations` | object | Annotations to add to all deployed objects                                | `{}`    |
-| `networkPort`       | int    | Deployment container, Deployment livenessProbe, Ingress, and Service port | `3000`  |
+| Name               | Type   | Description                                                               | Default |
+| ------------------ | ------ | ------------------------------------------------------------------------- | ------- |
+| `kubeVersion`      | string | Override Kubernetes version                                               | `nil`   |
+| `nameOverride`     | string | Partially override names.fullname                                         | `nil`   |
+| `fullnameOverride` | string | Fully override names.fullname                                             | `nil`   |
+| `commonLabels`     | object | Labels to add to all deployed objects                                     | `{}`    |
+| `networkPort`      | int    | Deployment container, Deployment livenessProbe, Ingress, and Service port | `3000`  |
 
 
 ### One-Time Secret configuration parameters
 
-| Name                                     | Type    | Description                                                                         | Default                     |
-| ---------------------------------------- | ------- | ----------------------------------------------------------------------------------- | --------------------------- |
-| `configuration.host`                     | string  | OTS host (the domain you will access OTS at)                                        | `"localhost"`               |
-| `configuration.ssl`                      | boolean | Enable SSL (HTTPS) support                                                          | `false`                     |
-| `configuration.baseRedisUrl`             | string  | Base Redis URL (see values.yaml for more info)                                      | `""`                        |
-| `configuration.colonels`                 | string  | OTS account created with this email is automatically considered admin of the system | `""`                        |
-| `configuration.secret`                   | string  | Used to encrypt OTS secrets - don't forget this, save it somewhere safe             | `"CHANGEME"`                |
-| `configuration.emailer.sendgridEnabled`  | boolean | Use SendGrid to allow OTS the ability to send emails                                | `false`                     |
-| `configuration.emailer.smtpEnabled`      | boolean | Use SMTP to allow OTS the ability to send emails                                    | `false`                     |
-| `configuration.emailer.from`             | string  | SendGrid/SMTP email sender "from" email address                                     | `""`                        |
-| `configuration.emailer.sendgridAccount`  | string  | SendGrid account login                                                              | `"CHANGEME"`                |
-| `configuration.emailer.sendgridPassword` | string  | SendGrid account password                                                           | `"CHANGEME"`                |
-| `configuration.emailer.sendgridFromName` | string  | SendGrid email sender "From" name                                                   | `"CHANGEME"`                |
-| `configuration.emailer.sendgridBcc`      | string  | SendGrid email BCC field                                                            | `nil`                       |
-| `configuration.emailer.smtpHost`         | string  | SMTP hostname                                                                       | `"localhost"`               |
-| `configuration.emailer.smtpPort`         | int     | SMTP port                                                                           | `587`                       |
-| `configuration.emailer.smtpTls`          | boolean | Enable/Disable TLS for SMTP                                                         | `false`                     |
-| `configuration.emailer.smtpUser`         | string  | SMTP username                                                                       | `nil`                       |
-| `configuration.emailer.smtpPass`         | string  | SMTP password                                                                       | `nil`                       |
-| `configuration.emailer.smtpAuth`         | string  | SMTP authentication type. Allowed values: `plain` or `login`                        | `nil`                       |
-| `configuration.incoming.enabled`         | boolean | Intended for use by IT support teams who need someone to send them sensitive info   | `false`                     |
-| `configuration.incoming.email`           | string  | Where the secret link is sent                                                       | `"CHANGEME@example.com"`    |
-| `configuration.incoming.passphrase`      | string  | Used to protect the "secret"                                                        | `"CHANGEME"`                |
-| `configuration.incoming.regex`           | string  | Used to ensure the ticket number is valid                                           | `'\A[a-zA-Z0-9]{6}\z'`      |
+| Name                                     | Type    | Description                                                                         | Default                  |
+| ---------------------------------------- | ------- | ----------------------------------------------------------------------------------- | ------------------------ |
+| `configuration.host`                     | string  | OTS host (the domain you will access OTS at)                                        | `"localhost"`            |
+| `configuration.hostPort`                 | int     | OTS host port (the HTTP port used to access OTS)                                    | `nil`                    |
+| `configuration.ssl`                      | boolean | Enable SSL (HTTPS) support                                                          | `false`                  |
+| `configuration.baseRedisUrl`             | string  | Base Redis URL (see values.yaml for more info)                                      | `""`                     |
+| `configuration.colonels`                 | string  | OTS account created with this email is automatically considered admin of the system | `""`                     |
+| `configuration.secret`                   | string  | Used to encrypt OTS secrets - don't forget this, save it somewhere safe             | `"CHANGEME"`             |
+| `configuration.emailer.sendgridEnabled`  | boolean | Use SendGrid to allow OTS the ability to send emails                                | `false`                  |
+| `configuration.emailer.smtpEnabled`      | boolean | Use SMTP to allow OTS the ability to send emails                                    | `false`                  |
+| `configuration.emailer.from`             | string  | SendGrid/SMTP email sender "from" email address                                     | `""`                     |
+| `configuration.emailer.sendgridAccount`  | string  | SendGrid account login                                                              | `"CHANGEME"`             |
+| `configuration.emailer.sendgridPassword` | string  | SendGrid account password                                                           | `"CHANGEME"`             |
+| `configuration.emailer.sendgridFromName` | string  | SendGrid email sender "From" name                                                   | `"CHANGEME"`             |
+| `configuration.emailer.sendgridBcc`      | string  | SendGrid email BCC field                                                            | `nil`                    |
+| `configuration.emailer.smtpHost`         | string  | SMTP hostname                                                                       | `"localhost"`            |
+| `configuration.emailer.smtpPort`         | int     | SMTP port                                                                           | `587`                    |
+| `configuration.emailer.smtpTls`          | boolean | Enable/Disable TLS for SMTP                                                         | `false`                  |
+| `configuration.emailer.smtpUser`         | string  | SMTP username                                                                       | `nil`                    |
+| `configuration.emailer.smtpPass`         | string  | SMTP password                                                                       | `nil`                    |
+| `configuration.emailer.smtpAuth`         | string  | SMTP authentication type. Allowed values: `plain` or `login`                        | `nil`                    |
+| `configuration.incoming.enabled`         | boolean | Intended for use by IT support teams who need someone to send them sensitive info   | `false`                  |
+| `configuration.incoming.email`           | string  | Where the secret link is sent                                                       | `"CHANGEME@example.com"` |
+| `configuration.incoming.passphrase`      | string  | Used to protect the "secret"                                                        | `"CHANGEME"`             |
+| `configuration.incoming.regex`           | string  | Used to ensure the ticket number is valid                                           | `'\A[a-zA-Z0-9]{6}\z'`   |
 
 
 ### Deployment parameters
@@ -116,10 +116,10 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Service parameters
 
-| Name           | Type    | Description                                 | Default      |
-| ---------------| ------- | ------------------------------------------- | ------------ |
-| `service.port` | int     | OTS Service port (overrides `networkPort`)  | `nil`        |
-| `service.type` | string  | OTS Service Type                            | `"NodePort"` |
+| Name           | Type   | Description                                | Default      |
+| ---------------| ------ | ------------------------------------------ | ------------ |
+| `service.port` | int    | OTS Service port (overrides `networkPort`) | `nil`        |
+| `service.type` | string | OTS Service Type                           | `"NodePort"` |
 
 
 ### Ingress parameters

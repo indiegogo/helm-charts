@@ -10,8 +10,12 @@ metadata:
 data:
   config: |
     :site:
-      :host: {{ print .Values.configuration.host ":" .Values.networkPort | squote }}
-      :domain: {{ required "'configuration.host' is required!" .Values.configuration.host }}
+      {{- if .Values.configuration.hostPort }}
+      :host: {{ print .Values.configuration.host ":" .Values.configuration.hostPort | squote }}
+      {{- else }}
+      :host: {{ .Values.configuration.host | squote }}
+      {{- end }}
+      :domain: {{ required "'configuration.host' is required!" .Values.configuration.host | squote }}
       :ssl: <%= {{ .Values.configuration.ssl | squote }} == 'true' %>
       :secret: <%= ENV['ONETIMESECRET_SECRET'] || 'CHANGEME' %>
     :redis:
