@@ -1,5 +1,36 @@
 apiVersion: v1
 entries:
+  circle-webhook-proxy:
+  - apiVersion: v2
+    appVersion: a834b72
+    created: "2021-09-01T21:37:44.170704485Z"
+    dependencies:
+    - name: common
+      repository: https://charts.indiegogo.com/
+      tags:
+      - indiegogo-common
+      version: 0.1.2
+    - condition: redis.chartEnabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 0.4.6
+    description: A Helm chart for our CircleCI webhook proxy
+    digest: 2948e3e06c7656ee8f55161020eba4d4a15e10f96f9213895bd0ea76da55bc2e
+    home: https://github.com/indiegogo/ops_tools/tree/main/docker/circle-webhook-proxy
+    keywords:
+    - circle-ci
+    - webhook
+    - proxy
+    maintainers:
+    - email: devops@indiegogo.com
+      name: DevOps
+    name: circle-webhook-proxy
+    sources:
+    - https://github.com/indiegogo/ops_tools/tree/main/docker/circle-webhook-proxy
+    type: application
+    urls:
+    - https://github.com/indiegogo/helm-charts/releases/download/circle-webhook-proxy-0.1.0/circle-webhook-proxy-0.1.0.tgz
+    version: 0.1.0
   cloudinary-staging:
   - apiVersion: v2
     appVersion: "1.0"
@@ -193,4 +224,4 @@ entries:
     urls:
     - https://github.com/indiegogo/helm-charts/releases/download/storybook-0.1.0/storybook-0.1.0.tgz
     version: 0.1.0
-generated: "2021-09-01T21:34:48.781179158Z"
+generated: "2021-09-01T21:37:44.170716186Z"
