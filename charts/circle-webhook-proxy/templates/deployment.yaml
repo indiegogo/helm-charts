@@ -1,0 +1,62 @@
+kind: Deployment
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplValues.render" ( dict "value" .Values.commonLabels "scope" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "common.names.fullname" . }}
+  replicas: {{ .Values.replicaCount }}
+  {{- if .Values.strategy }}
+  strategy: {{- toYaml .Values.strategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common.names.fullname" . }}
+    spec:
+      containers:
+        - name: {{ include "common.names.fullname" . }}
+          {{- with .Values.image }}
+          image: "{{- if contains ":" .repository -}}{{ .repository }}{{- else -}}{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ default $.Chart.AppVersion .tag }}{{- end -}}"
+          {{- end }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if or .Values.environmentIncludeDefault .Values.environment }}
+          env:
+            {{- if .Values.environmentIncludeDefault }}
+            - name: APP_ENV
+              value: production
+            - name: REDIS_URL
+              value: redis://redis
+            {{- end }}
+
+            {{- range $key, $value := .Values.environment }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - containerPort: {{ default .Values.networkPort .Values.containerPort }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ default .Values.networkPort .Values.livenessProbe.port }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- toYaml .Values.customLivenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbeEnabled }}
+          readinessProbe: {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}

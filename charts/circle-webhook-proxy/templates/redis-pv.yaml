@@ -1,0 +1,19 @@
+{{- if and .Values.persistentVolume.enabled (not .Values.redis.storage.persistentVolumeClaimName) }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ printf "%s-redis-data" (include "common.names.fullname" .) }}
+spec:
+  capacity:
+    storage: {{ .Values.redis.storage.requestedSize }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .Values.persistentVolume.reclaimPolicy }}
+  gcePersistentDisk:
+    pdName: {{ required "To use an existing persistent disk, please set a persistent disk name in values.yaml (persistentVolume.pdName)" .Values.persistentVolume.pdName }}
+    fsType: ext4
+  storageClassName: {{ .Values.redis.storage.className }}
+  claimRef:
+    name: redis-data-redis-0
+    namespace: {{ .Release.Namespace | quote }}
+{{- end }}
