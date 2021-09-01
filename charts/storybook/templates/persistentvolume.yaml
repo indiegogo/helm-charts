@@ -1,0 +1,19 @@
+{{- if .Values.storage.persistentVolume.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "common.names.fullname" . }}
+spec:
+  capacity:
+    storage: {{ .Values.storage.requestedSize }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .Values.storage.persistentVolume.reclaimPolicy }}
+  gcePersistentDisk:
+    pdName: {{ required "To use an existing persistent disk, please set a persistent disk name in values.yaml (storage.persistentVolume.pdName)" .Values.storage.persistentVolume.pdName }}
+    fsType: ext4
+  storageClassName: {{ .Values.storage.className }}
+  claimRef:
+    name: {{ include "common.names.fullname" . }}
+    namespace: {{ .Release.Namespace | quote }}
+{{- end }}

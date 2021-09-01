@@ -1,0 +1,20 @@
+apiVersion: v2
+name: storybook
+version: 0.1.0
+description: A Helm chart for Storybook
+type: application
+keywords:
+  - storybook
+home: https://github.com/indiegogo/ops_tools/tree/main/docker/storybook
+sources:
+  - https://github.com/indiegogo/ops_tools/tree/main/docker/storybook
+dependencies:
+  - name: common
+    version: "0.1.2"
+    repository: https://charts.indiegogo.com/
+    tags:
+      - indiegogo-common
+maintainers:
+  - name: DevOps
+    email: devops@indiegogo.com
+appVersion: "b0d7aa9"
