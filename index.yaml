@@ -139,4 +139,29 @@ entries:
     urls:
     - https://github.com/indiegogo/helm-charts/releases/download/onetimesecret-0.12.0/onetimesecret-0.12.0.tgz
     version: 0.12.0
-generated: "2021-08-20T17:51:03.279575632Z"
+  storybook:
+  - apiVersion: v2
+    appVersion: b0d7aa9
+    created: "2021-09-01T21:21:40.643684573Z"
+    dependencies:
+    - name: common
+      repository: https://charts.indiegogo.com/
+      tags:
+      - indiegogo-common
+      version: 0.1.2
+    description: A Helm chart for Storybook
+    digest: e8366726a5b0e22405f07dc7f3ce7185ac029388373804109604a6e2d0bd4dc6
+    home: https://github.com/indiegogo/ops_tools/tree/main/docker/storybook
+    keywords:
+    - storybook
+    maintainers:
+    - email: devops@indiegogo.com
+      name: DevOps
+    name: storybook
+    sources:
+    - https://github.com/indiegogo/ops_tools/tree/main/docker/storybook
+    type: application
+    urls:
+    - https://github.com/indiegogo/helm-charts/releases/download/storybook-0.1.0/storybook-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-09-01T21:21:40.643998775Z"
