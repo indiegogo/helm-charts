@@ -1,9 +1,0 @@
-apiVersion: v2
-name: chips-staging
-description: A Helm chart for chips staging deployment
-type: application
-version: 0.1.0
-appVersion: "15671c8"
-maintainers:
-  - name: DevOps
-    email: devops@indiegogo.com

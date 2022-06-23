@@ -1,7 +1,0 @@
-apiVersion: networking.gke.io/v1
-kind: ManagedCertificate
-metadata:
-  name: chips-stage-websocket-bus
-spec:
-  domains:
-    - stage-bus.trypathway.com
