@@ -51,6 +51,17 @@ data:
           return 200;
         }
 
+        # Of interesting note for the next two locations, you can't mix mapped
+        # variables with default capture variables ($1, $2, etc.) which is why
+        # these captures are named.
+
+        location ~ image/upload {
+          # Prepend both q_auto & f_auto for Cloudinary hosted assets.
+          # This allows for either to be overridden by setting the option again later.
+          rewrite ^(?!q_auto,f_auto.*)(?<prefix>.*?image/upload)/(?<postfix>.*)$ "${prefix}/q_auto,f_auto,${postfix}" break;
+          try_files /nonexistent @proxy;
+        }
+
         location ^~ /indiegogo-dev {
           # Strip the indiegogo-dev/ prefix
           rewrite ^/indiegogo-dev/(.*)$ /$1 last;
@@ -58,8 +69,6 @@ data:
 
         location ~ f_auto {
           # Replace f_auto with appropriate setting based on Accept headers.
-          # Of interesting note, you can't mix mapped variables with default capture
-          # variables ($1, $2, etc.) which is why these captures are named.
           rewrite ^(?<prefix>.*)f_auto(?<postfix>.*)$ "${prefix}${f_auto_setting}${postfix}" break;
           try_files /nonexistent @proxy;
         }
