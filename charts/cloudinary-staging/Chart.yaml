@@ -1,7 +1,7 @@
 apiVersion: v2
 name: cloudinary-staging
-version: 0.1.0
-description: A Helm chart for Cloudinary
+version: 0.1.1
+description: A Helm chart for Cloudinary, used by Staging
 type: application
 keywords:
   - cloudinary
