@@ -3,6 +3,32 @@ entries:
   cloudinary-staging:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2024-06-24T21:58:09.545347376Z"
+    dependencies:
+    - name: common
+      repository: https://charts.indiegogo.com/
+      tags:
+      - indiegogo-common
+      version: 0.1.2
+    description: A Helm chart for Cloudinary, used by Staging
+    digest: b26af3a7a1631e6b024f5822c6762fff5fb54530b2b6cacbfcf31367b2ca0fc9
+    keywords:
+    - cloudinary
+    - proxy
+    - images
+    - image-proxy
+    maintainers:
+    - email: devops@indiegogo.com
+      name: DevOps
+    name: cloudinary-staging
+    sources:
+    - https://github.com/indiegogo/ops_tools/tree/main/docker/nginx-cloudinary
+    type: application
+    urls:
+    - https://github.com/indiegogo/helm-charts/releases/download/cloudinary-staging-0.1.1/cloudinary-staging-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2021-08-20T17:49:09.431294542Z"
     dependencies:
     - name: common
@@ -226,4 +252,4 @@ entries:
     urls:
     - https://github.com/indiegogo/helm-charts/releases/download/storybook-0.1.0/storybook-0.1.0.tgz
     version: 0.1.0
-generated: "2021-09-01T21:39:18.994252412Z"
+generated: "2024-06-24T21:58:09.545363336Z"
